@@ -43,6 +43,10 @@ while game.run:
                 hero.jump(HERO_JUMP)
             elif event.unicode == 'h':
                 key_h = event.key
+                if game.is_help:
+                    game.resume()
+                else:
+                    game.show_help()
             elif event.unicode == 'm':
                 game.music.change()
             elif event.unicode == 'u':
@@ -54,15 +58,10 @@ while game.run:
                 hero.fire()
 
         elif event.type == pygame.KEYUP:
-            if game.is_help:
-                game.resume()
-            else:
-                if event.key == pygame.K_LEFT or event.key == key_a:
-                    hero.stop()
-                elif event.key == pygame.K_RIGHT or event.key == key_d:
-                    hero.stop()
-                elif event.key == key_h:
-                    game.show_menu()
+            if event.key == pygame.K_LEFT or event.key == key_a:
+                hero.stop()
+            elif event.key == pygame.K_RIGHT or event.key == key_d:
+                hero.stop()
 
     if game.in_game():
         # Вычисления:
@@ -80,6 +79,10 @@ while game.run:
         game.draw_back_with_shift()
         game.window.blit(game.help.line(points=game.points, lives=game.lives), (0, 10))
         game.all_sprites.draw(game.window)
+
+        # Если включен режим помощи, показываем меню помощи
+        if game.is_help:
+            game.help.show_help(game.window)
 
     pygame.display.update()
     if game.goal_touched(hero):

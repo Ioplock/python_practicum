@@ -63,3 +63,11 @@ python ex_{n}.py
 cd lab3
 python ex_{n}.py
 ```
+
+### Лабораторная работа 4: Модификация игры
+- [Описание лабораторной работы](lab4/README.md)
+- Запуск:
+```bash
+cd lab4/game
+python arcada_main.py
+```

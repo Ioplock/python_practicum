@@ -1,54 +1,56 @@
 import pygame
 from constants import *
- 
-class Help():
+
+class Help:
     def __init__(self):
-        big_font = pygame.font.Font(None, 36)
-        self.small_font = pygame.font.Font(None, 24) # этот шрифт надо помнить и для постоянной надписи
-        text1 = big_font.render(" Управление: ", 1, C_YELLOW)
-        text2 = self.small_font.render(" Влево: 'a' или стрелка влево ", 1, C_YELLOW)
-        text3 = self.small_font.render(" Вправо: 'd' или стрелка влево ", 1, C_YELLOW)
-        text4 = self.small_font.render(" Прыжок: 'w' или стрелка верх ", 1, C_YELLOW)
-        text5 = self.small_font.render(" Выстрел: пробел ", 1, C_YELLOW)
-        text6 = self.small_font.render(" Музыка вкл/выкл: 'm', громче: 'u', тише: ' j ' ", 1, C_YELLOW)
-        text7 = self.small_font.render(" Подсказка вкл/выкл (игра на паузе): 'h' ", 1, C_YELLOW)
+        self.font = pygame.font.Font(None, 36)
+        self.small_font = pygame.font.Font(None, 24)
+        self.title_font = pygame.font.Font(None, 48)
         
-        img = pygame.Surface([round(3 * win_width / 4), round(3 * win_height / 4)])
-        img.fill(C_DARK)
-        w = round(win_width / 8)
-        h = round(win_height / 12)
-        h1 = round(h / 2)
-        img.blit(text1, (w, h))
-        img.blit(text2, (w, 3 * h - h1))
-        img.blit(text3, (w, 4 * h - h1))
-        img.blit(text4, (w, 5 * h - h1))
-        img.blit(text5, (w, 6 * h - h1))
-        img.blit(text6, (w, 7 * h - h1))
-        img.blit(text7, (w, 8 * h - h1))
-        img.set_alpha(160)
-        self.img = img
+    def line(self, points=0, lives=3):
+        """Создает строку с информацией о текущем состоянии игры"""
+        text = f"Очки: {points} | Жизни: {lives}"
+        return self.font.render(text, True, (255, 255, 255))
 
-        # Добавим строки для постоянной подсказки:
-        self.text_points = self.small_font.render("Очков:   ", 1, C_DARK)
-        self.text_points_w = self.text_points.get_rect().width
-        self.text_lives = self.small_font.render("Жизней:   ", 1, C_DARK)
-        self.text_lives_w = self.text_lives.get_rect().width
-        self.text_help = self.small_font.render("Пауза/подсказка: 'h'", 1, C_DARK)
-        self.text_height = self.text_help.get_rect().height
+    def show_help(self, window):
+        """Показывает меню помощи"""
+        # Заголовок
+        title = self.title_font.render("Управление и правила игры", True, (255, 255, 255))
+        title_rect = title.get_rect(center=(win_width/2, 50))
+        window.blit(title, title_rect)
 
-    def line(self, points=0, lives=1):
-        tab = 50
-        img = pygame.Surface([win_width, self.text_height], pygame.SRCALPHA) # исходник - попиксельно прозрачный
-        # пишем строку про жизни, добавляем число жизней:
-        img.blit(self.text_lives, (0, 0))
-        text = self.small_font.render(str(lives), 1, C_YELLOW)
-        img.blit(text, (self.text_lives_w, 0))
-        # пишем строку про очки, добавляем число очков:
-        img.blit(self.text_points, (self.text_lives_w + tab, 0))
-        text = self.small_font.render(str(points), 1, C_YELLOW)
-        img.blit(text, (self.text_lives_w + tab + self.text_points_w, 0))
-        # пишем строку про подсказку:
-        img.blit(self.text_help, (self.text_lives_w + tab + self.text_points_w + tab, 0))
-        return img
+        # Основные элементы управления
+        controls = [
+            "Управление персонажем:",
+            "A или ← - движение влево",
+            "D или → - движение вправо",
+            "W или ↑ - прыжок",
+            "Пробел - стрельба",
+            "",
+            "Дополнительные клавиши:",
+            "H - показать/скрыть это меню",
+            "M - включить/выключить музыку",
+            "U - увеличить громкость",
+            "J - уменьшить громкость",
+            "",
+            "Цель игры:",
+            "Достигните финиша, избегая врагов",
+            "Стреляйте во врагов для получения очков",
+            "У вас есть 3 жизни, берегите их!",
+            "",
+            "Нажмите H для возврата в игру"
+        ]
+
+        # Отображение текста
+        y = 100
+        for line in controls:
+            if line:  # Если строка не пустая
+                if line.endswith(":"):  # Если это заголовок
+                    text = self.font.render(line, True, (255, 255, 0))
+                else:
+                    text = self.small_font.render(line, True, (255, 255, 255))
+                text_rect = text.get_rect(left=50, top=y)
+                window.blit(text, text_rect)
+            y += 30  # Увеличиваем отступ для следующей строки
 
 

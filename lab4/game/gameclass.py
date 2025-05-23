@@ -45,7 +45,7 @@ class Game():
         # список используемых костюмов:
         self.costumes = []
         # переменные для числа очков и жизней:
-        self.lives = HERO_START_LIVES
+        self.lives = 3
         self.points = 0
 
     def start(self):
@@ -154,10 +154,20 @@ class Game():
         self.all_sprites.add(goal)
 
     def show_menu(self):
-        w = win_width / 8
-        h = win_height / 8
-        self.window.blit(self.help.img, (w, h))
         self.is_help = True
+        self.help.show_help(self.window)
+        pygame.display.update()
+        waiting = True
+        while waiting:
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    self.stop()
+                    waiting = False
+                elif event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_RETURN:
+                        waiting = False
+                        self.is_help = False
+        self.is_help = False
     
     def resume(self):
         self.is_help = False
@@ -165,5 +175,5 @@ class Game():
     def change_points(self, change=1):
         self.points += change
     
-    def minus_lives(self, change=1):
-        self.lives -= change
+    def minus_lives(self):
+        self.lives -= 1
